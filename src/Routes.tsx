@@ -1,6 +1,6 @@
 
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import CompanyPage from './pages/CompanyPage';
+import CompaniesPage from './pages/CompaniesPage';
 import HomePage from './pages/HomePage'
 import UsersPage from './pages/UsersPage';
 
@@ -11,7 +11,7 @@ export default function Routes() {
             <Switch>
                 <Route path="/"  exact component={HomePage} />
                 <Route path="/users" exact component={UsersPage}  />
-                <Route path="/companies" exact component={CompanyPage}  />
+                <Route path="/companies" exact component={CompaniesPage}  />
             </Switch>
         </BrowserRouter>
     )

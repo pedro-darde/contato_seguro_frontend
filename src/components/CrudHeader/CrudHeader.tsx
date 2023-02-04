@@ -12,17 +12,17 @@ export default function CrudHeader({ onAddClick, onSearch, searchFieldOption }: 
     const [searchOption, setSearchOption] = useState<string>("")
 
     return (
-        <Container maxWidth="xs">
+        <Container>
             <Grid container spacing={3} sx={{ flexGrow: 1 }}>
                 <Grid xs={2}>
-                    <IconButton sx={{ backgroundColor: "black"}}>
+                    <IconButton sx={{ backgroundColor: "black", color: "white"}}>
                         <Add></Add>
                     </IconButton>
                 </Grid>
                 <Grid xs={6}>
                     <Input placeholder="Buscar..." />
                 </Grid>
-                <Grid>
+                <Grid xs={4}> 
                     <Select placeholder="Campo de busca">
                         {searchFieldOption.map(({ label, value }) => <Option value={value}> {label}</Option>)}
                     </Select>
