@@ -1,6 +1,8 @@
-import { Grid, Container, Card, Typography, Input } from '@mui/joy'
+import { Grid, Container, Card, Typography } from '@mui/joy'
 import Button from '@mui/joy/Button';
+import { useHistory } from 'react-router-dom';
 export default function HomePage() {
+    const history = useHistory();
     return (
         <Container maxWidth="sm">
             <Card variant="outlined">
@@ -9,10 +11,10 @@ export default function HomePage() {
                 </Typography>
                 <Grid container spacing={2} sx={{ flexGrow: 1, alignContent: "center", justifyContent: "center"}}>
                     <Grid xs={6}>
-                        <Button color="neutral" fullWidth> Usuarios </Button>
+                        <Button color="neutral" fullWidth onClick={() => history.push('/users')}> Usuarios </Button>
                     </Grid>
                     <Grid xs={6}>
-                        <Button  color="neutral" fullWidth> Empresas </Button>
+                        <Button  color="neutral" fullWidth onClick={() => history.push('/companies')}> Empresas </Button>
                     </Grid>
                 </Grid>
             </Card>
