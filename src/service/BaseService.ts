@@ -1,10 +1,11 @@
 
 import {axiosPlugin} from "../plugins/axios";
 
-type FilterOptions = {
-    searchField: string,
-    searchValue: string,
-    searchOperation: string
+export type FilterOptions = {
+    searchField?: string,
+    searchValue?: string,
+    searchOperation?: string,
+    extra?: any
 }
 
 export default class BaseService {
@@ -18,18 +19,18 @@ export default class BaseService {
         await axiosPlugin.post(`/${this.serviceName}`, data)
     }
 
-    async list<T>(options?: FilterOptions): Promise<T[]> {
-        const { data: { data: result }} = await axiosPlugin.get<{ data: T[]}>(`/${this.serviceName}`, {
-            data: options
+    async list<T>(options?: FilterOptions): Promise<T> {
+        const { data: { data: result }} = await axiosPlugin.get<{ data: T}>(`/${this.serviceName}`, {
+            params: options
         })
         return result
     }
 
     async delete(id:number) {
-        await axiosPlugin.delete(`/${id}`)
+        await axiosPlugin.delete(`/${this.serviceName}/${id}`)
     }
 
-    async update(data: any): Promise<void> {
-        await axiosPlugin.patch(`/${this.serviceName}`, data)
+    async update(id:number, data: any): Promise<void> {
+        await axiosPlugin.patch(`/${this.serviceName}/${id}`, data)
     }
 }

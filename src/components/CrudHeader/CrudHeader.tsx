@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Grid, Container, IconButton, Input, Select, Option } from "@mui/joy";
+import {useEffect, useState} from "react";
+import {Grid, Container, IconButton, Input, Select, Option, Autocomplete} from "@mui/joy";
 import { Add } from "@mui/icons-material";
 type CrudHeaderProps = {
   onAddClick(): void;
   onSearch(value: string, field: string): void;
+  searchAll(): void,
   searchFieldOption: Array<{ label: string; value: string }>;
 };
 
@@ -11,10 +12,25 @@ export default function CrudHeader({
   onAddClick,
   onSearch,
   searchFieldOption,
+    searchAll
 }: CrudHeaderProps) {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [searchOption, setSearchOption] = useState<string>("");
+  const [searchOption, setSearchOption] = useState<{ label: string, value: string }>({label: "", value: ""});
 
+  useEffect(() => {
+    handleSearch()
+  }, [searchValue])
+
+  const handleSearch = () => {
+    console.log(searchValue)
+    if (searchOption.value) {
+      if(!searchValue) {
+        searchAll()
+      } else {
+        onSearch(searchValue, searchOption.value)
+      }
+    }
+  }
   return (
     <Container>
       <Grid container spacing={3} sx={{ flexGrow: 1 }}>
@@ -27,14 +43,15 @@ export default function CrudHeader({
           </IconButton>
         </Grid>
         <Grid xs={6}>
-          <Input placeholder="Buscar..." />
+          <Input disabled={!searchOption.value} placeholder="Buscar..." value={searchValue} onChange={(e) => {
+            setSearchValue(e.target.value)
+          }}/>
         </Grid>
         <Grid xs={4}>
-          <Select placeholder="Campo de busca">
-            {searchFieldOption.map(({ label, value }) => (
-              <Option value={value}> {label}</Option>
-            ))}
-          </Select>
+          <Autocomplete placeholder={"Campo de busca"} options={searchFieldOption} getOptionLabel={item => item.label} value={searchOption} onChange={(e, value) => {
+              const searchOption = value ?? { label: "", value: ""}
+              setSearchOption(searchOption)
+          }} />
         </Grid>
       </Grid>
     </Container>

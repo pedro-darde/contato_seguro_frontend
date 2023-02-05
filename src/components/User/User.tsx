@@ -12,29 +12,30 @@ import {FilterOptions} from "../../service/BaseService";
 type CompanyComponentProps = {
     companies?: Company[];
     users?: User[],
-    refetchCompanies: (options?: FilterOptions) => void
+    refetechUsers: (options?: FilterOptions) => void
 };
-export default function CompanyComponent({companies, users, refetchCompanies}: CompanyComponentProps) {
+export default function UserComponent({companies, users, refetechUsers}: CompanyComponentProps) {
     const filterFields = [
         {label: "Nome", value: "name"},
-        {label: "CNPJ", value: "cnpj"},
-        {label: "Endereco", value: "address"},
+        {label: "E-mail", value: "email"},
+        {label: "Data de nascimento", value: "birth_date"},
+        {label: "Cidade de nascimento", value: "birth_city"},
     ];
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [currentCompany, setCurrentCompany] = useState<Company | null>(null)
+    const [currentUser, setCurrentUser] = useState<User | null>(null)
     const onSave = () => {
-        toast('Empresa salva com sucesso!')
-        refetchCompanies()
+        toast('Usuário salva com sucesso!')
+        refetechUsers()
         setShowModal(false)
     }
 
-    const onClickEdit = (c: Company) => {
-        setCurrentCompany(c)
+    const onClickEdit = (u: User) => {
+        setCurrentUser(u)
         setShowModal(true)
     }
 
     const onCloseModal = () => {
-        setCurrentCompany(null)
+        setCurrentUser(null)
         setShowModal(false)
     }
 
@@ -44,9 +45,9 @@ export default function CompanyComponent({companies, users, refetchCompanies}: C
             searchField: column,
             searchOperation: "="
         }
-        if (column === 'cnpj') options.searchOperation = 'ilike'
-        if (column === 'address') options.searchOperation = 'ilike'
-        refetchCompanies(options)
+        if (column === 'email') options.searchOperation = 'ilike'
+        if (column === 'name') options.searchOperation = 'ilike'
+        refetechUsers(options)
     }, 200)
 
 
@@ -58,15 +59,15 @@ export default function CompanyComponent({companies, users, refetchCompanies}: C
                 }}
                 onSearch={filter}
                 searchFieldOption={filterFields}
-                searchAll={() => refetchCompanies()}
+                searchAll={() => refetechUsers()}
             />
-            <TableList companies={companies} onClickEdit={onClickEdit} onDelete={refetchCompanies}/>
+            <TableList users={users} onClickEdit={onClickEdit} onDelete={refetechUsers}/>
             <ModalAddEdit
-                users={users}
+                companies={companies}
                 handleClose={onCloseModal}
                 onSaved={onSave}
                 visible={showModal}
-                currentCompany={currentCompany}
+                currentUser={currentUser}
             />
         </div>
     );

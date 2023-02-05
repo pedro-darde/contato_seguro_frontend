@@ -1,9 +1,11 @@
+import {Company} from "./Company";
+
 export type User = {
     id?: number,
     name: string,
     cellphone: string,
-    birthDate: string,
-    birthCity: string,
+    birth_date: string,
+    birth_city: string,
     email: string,
-    companies: Array<number>
+    companies: Company[]
 }

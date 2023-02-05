@@ -1,0 +1,7 @@
+.tableList>thead>tr>th {
+    text-align: center !important;
+}
+
+.tableList>tbody>tr {
+    text-align: center !important;
+}

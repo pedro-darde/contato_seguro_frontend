@@ -1,49 +1,55 @@
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import { Company } from "../../models/Company";
 import InputMask from 'react-input-mask'
 import {
   useForm,
 } from "react-hook-form";
 import {
-  Button,
-  FormControl,
-  FormHelperText,
-  FormLabel, Grid,
-  Input,
-  Modal,
-  ModalClose,
-  Sheet,
-  Typography,
+    Autocomplete,
+    Button,
+    FormControl,
+    FormHelperText,
+    FormLabel, Grid,
+    Input,
+    Modal,
+    ModalClose,
+    Sheet,
+    Typography
 } from "@mui/joy";
 import {validarCNPJ} from "../../helpers/CnpjValidator";
+import {User} from "../../models/User";
+import './styles/ModalAddEdit.css'
+import {companyService} from "../../service/CompanyService";
+import {toast} from "react-toastify";
 type ModalAddEditProps = {
-  currentCompany?: Company;
+  currentCompany?: Company | null;
   visible: boolean;
   onSaved: () => void;
   handleClose(): void;
+  users?: User[]
 };
 
-export default function ModalAddEdit({
-  handleClose,
-  onSaved,
-  visible,
-  currentCompany,
-}: ModalAddEditProps) {
+export default function ModalAddEdit({ handleClose, onSaved, visible, currentCompany, users }: ModalAddEditProps) {
+    const [inputColor, setInputColor] = useState("rgb(216,216,223)")
   useEffect(() => {
-    reset()
+
     if (visible) {
       handleSetValuesOnOpen();
+    }
+    return () => {
+        reset()
+        setInputColor("rgb(216,216,223)")
     }
   }, [visible]);
 
   const {
     setValue,
     register,
-    formState: { errors },
+    formState: { errors, isValid },
     handleSubmit,
     reset,
-
-  } = useForm({
+    getValues
+  } = useForm<Company>({
     values: {
       name: "",
       cnpj: "",
@@ -58,14 +64,57 @@ export default function ModalAddEdit({
       setValue("name", currentCompany.name);
       setValue("cnpj", currentCompany.cnpj);
       setValue("address", currentCompany.address);
-      setValue("users", currentCompany.users as never[]);
+      setValue("users", currentCompany.users);
     }
   };
 
-  const save = async (data: any) => {
-    // const ok = handleSubmit()
-    console.log("asdasdasdmkas");
+  const handleChangeOrFocusInput = (e: any) => {
+      if (errors.cnpj) {
+          setInputColor("red")
+      } else {
+          if (e.type === 'focus') {
+              setInputColor('#096bde')
+          } else {
+              setInputColor("rgb(216,216,223)")
+          }
+      }
+  }
+
+  const save = async (data: Company) => {
+    try {
+        if (currentCompany?.id) {
+            await edit(data)
+        } else {
+            await create(data)
+        }
+        onSaved()
+    } catch (e: any) {
+        if (e.response?.data) {
+            let message = '';
+            const errorData = e.response.data
+            Object.keys(errorData).forEach(key => {
+                message += `${errorData[key][0]} \n`
+            })
+            toast(message, {
+                type: "error",
+            })
+        } else {
+            toast('Ocorreu um erro interno, contate o administrador.', {
+                type: "error"
+            })
+        }
+    }
   };
+
+  async function edit(data: any) {
+      data.users = data.users?.map((user: any) => user.id) ?? []
+      await companyService.update(currentCompany?.id!,data)
+  }
+
+  async function create(data: any) {
+      data.users = data.users?.map((user: any) => user.id) ?? []
+      await companyService.create(data)
+  }
 
   return (
     <Modal
@@ -73,7 +122,7 @@ export default function ModalAddEdit({
       aria-describedby="modal-body"
       open={visible}
       onClose={handleClose}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center", zIndex: "10"}}
     >
       <Sheet
         sx={{
@@ -106,6 +155,7 @@ export default function ModalAddEdit({
           <FormControl>
             <FormLabel>Nome</FormLabel>
             <Input
+
               {...register("name", { required: "Informe um nome" })}
               error={!!errors.name}
             />
@@ -120,12 +170,22 @@ export default function ModalAddEdit({
           <FormControl>
             <FormLabel>CNPJ</FormLabel>
               <InputMask
-                    mask={"99.999.999/9999-99"}
-                  {...register("cnpj", { required: true,  validate: { validarCNPJ }})}
-                  // error={!!errors.cnpj}
+                  onFocus={handleChangeOrFocusInput}
+                  // className={"inputLike"}
+                  mask={"99.999.999/9999-99"}
+                  style={{
+                      border: `1px solid ${inputColor}`,
+                      padding: "0.15rem",
+                      borderRadius: "10px",
+                      minHeight: "40px"
+                  }}
+                  {...register("cnpj", {
+                      required: true,
+                      validate: { validarCNPJ },
+                      onChange: handleChangeOrFocusInput
+                  })}
               ></InputMask>
             {errors.cnpj && (
-
               <FormHelperText
                 sx={{ color: "red", fontStyle: "italic", fontSize: "0.75rem" }}
               >
@@ -136,7 +196,8 @@ export default function ModalAddEdit({
           <FormControl>
             <FormLabel>Endereço</FormLabel>
             <Input
-              {...register("address", { required: "Informe um endereço" })}
+              {...register("address", {
+                  required: "Informe um endereço"})}
               error={!!errors.address}
             />
             {errors.address && (
@@ -147,9 +208,17 @@ export default function ModalAddEdit({
               </FormHelperText>
             )}
           </FormControl>
+            {users && users.length ? (
+                <FormControl>
+                    <FormLabel> Usuários </FormLabel>
+                    <Autocomplete value={getValues("users")} options={users} getOptionLabel={item => item.name} multiple onChange={(e, value) => {
+                        setValue('users', value)
+                    }}/>
+                </FormControl>
+            ): null}
           <Grid sx={{ display: "flex", justifyContent: "space-between", marginTop: "1rem"}}>
               <Button color='danger' type='button' onClick={() => reset()}> Limpar </Button>
-              <Button sx={{ backgroundColor: "black", color: "white" }} type="submit"> Enviar </Button>
+              <Button sx={{ backgroundColor: "black", color: "white" }} type="submit"  disabled={!isValid}> Enviar </Button>
           </Grid>
         </form>
       </Sheet>
