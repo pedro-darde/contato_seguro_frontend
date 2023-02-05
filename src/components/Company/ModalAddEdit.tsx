@@ -154,7 +154,7 @@ export default function ModalAddEdit({ handleClose, onSaved, visible, currentCom
         >
           Inserir
         </Typography>
-        <form id="modal-body" onSubmit={handleSubmit(save)} style={{ width: "450px" }}>
+        <form id="modal-body" onSubmit={handleSubmit(save)} className={"formCadastro"}>
           <FormControl>
             <FormLabel>Nome</FormLabel>
             <Input
