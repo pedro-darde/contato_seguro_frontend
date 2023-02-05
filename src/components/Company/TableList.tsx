@@ -16,7 +16,7 @@ type TableListProps = {
 export default function TableList({onClickEdit, onDelete, companies}: TableListProps) {
     const { showConfirm } = useAlert()
     const handleDelete = (companyId: number) => {
-        showConfirm("Você tem certeza ? O vínculo com usuários sera removido também!").then(res => {
+        showConfirm("Você tem certeza? O vínculo com os usuários será removido também.").then(res => {
             if (res.isConfirmed) {
                 companyService.delete(companyId).then(res => {
                     toast("Empresa removida")

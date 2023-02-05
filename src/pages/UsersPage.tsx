@@ -21,13 +21,13 @@ export default function UsersPage() {
         }
     }, [])
 
-    async function fetchUsers() {
-        const users = await userService.list<User[]>()
+    async function fetchUsers(options?: FilterOptions) {
+        const users = await userService.list<User[]>(options)
         setUsers(users)
     }
 
-    async function fetchCompanies(options?: FilterOptions) {
-        const companies = await companyService.list<Company[]>(options)
+    async function fetchCompanies() {
+        const companies = await companyService.list<Company[]>()
         setCompanies(companies)
     }
     return (

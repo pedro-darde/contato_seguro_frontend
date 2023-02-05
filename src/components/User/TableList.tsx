@@ -16,11 +16,11 @@ type TableListProps = {
 }
 export default function TableList({onClickEdit, onDelete, users}: TableListProps) {
     const { showConfirm } = useAlert()
-    const handleDelete = (companyId: number) => {
-        showConfirm("Você tem certeza ? O vínculo com empresas sera removido também!").then(res => {
+    const handleDelete = (userId: number) => {
+        showConfirm("Você tem certeza? O vínculo com as empresas será removido também.").then(res => {
             if (res.isConfirmed) {
-                companyService.delete(companyId).then(res => {
-                    toast("Usuário removida")
+                userService.delete(userId).then(res => {
+                    toast("Usuário removido")
                     onDelete()
                 }).catch(err => {
                     console.log(err)

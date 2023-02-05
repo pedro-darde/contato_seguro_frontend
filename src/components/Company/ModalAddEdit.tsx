@@ -217,7 +217,6 @@ export default function ModalAddEdit({ handleClose, onSaved, visible, currentCom
                     <Autocomplete value={companyUsers} options={users} getOptionLabel={item => item.name} multiple onChange={(e, value) => {
                         setCompanyUsers(value)
                         setValue('users', value)
-                        console.log("aqui", getValues("users"))
                     }}/>
                 </FormControl>
             ): null}

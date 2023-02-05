@@ -23,11 +23,7 @@ export default function CompaniesPage() {
     }, [])
 
     async function fetchUsers() {
-        const users = await userService.list<User[]>({
-            extra: {
-                withNoCompany: true
-            }
-        })
+        const users = await userService.list<User[]>()
         setUsers(users)
     }
 
