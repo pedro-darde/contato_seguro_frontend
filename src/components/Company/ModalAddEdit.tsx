@@ -31,6 +31,7 @@ type ModalAddEditProps = {
 
 export default function ModalAddEdit({ handleClose, onSaved, visible, currentCompany, users }: ModalAddEditProps) {
     const [inputColor, setInputColor] = useState("rgb(216,216,223)")
+    const [companyUsers, setCompanyUsers] = useState<User[]>([])
   useEffect(() => {
 
     if (visible) {
@@ -39,6 +40,7 @@ export default function ModalAddEdit({ handleClose, onSaved, visible, currentCom
     return () => {
         reset()
         setInputColor("rgb(216,216,223)")
+        setCompanyUsers([])
     }
   }, [visible]);
 
@@ -65,6 +67,7 @@ export default function ModalAddEdit({ handleClose, onSaved, visible, currentCom
       setValue("cnpj", currentCompany.cnpj);
       setValue("address", currentCompany.address);
       setValue("users", currentCompany.users);
+      setCompanyUsers(currentCompany.users)
     }
   };
 
@@ -211,8 +214,10 @@ export default function ModalAddEdit({ handleClose, onSaved, visible, currentCom
             {users && users.length ? (
                 <FormControl>
                     <FormLabel> Usuários </FormLabel>
-                    <Autocomplete value={getValues("users")} options={users} getOptionLabel={item => item.name} multiple onChange={(e, value) => {
+                    <Autocomplete value={companyUsers} options={users} getOptionLabel={item => item.name} multiple onChange={(e, value) => {
+                        setCompanyUsers(value)
                         setValue('users', value)
+                        console.log("aqui", getValues("users"))
                     }}/>
                 </FormControl>
             ): null}

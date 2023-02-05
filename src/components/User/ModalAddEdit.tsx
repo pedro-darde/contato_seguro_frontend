@@ -31,9 +31,14 @@ type ModalAddEditProps = {
 };
 
 export default function ModalAddEdit({ handleClose, onSaved, visible, currentUser, companies }: ModalAddEditProps) {
+    const [userCompanies, setUserCompanies] = useState<Company[]>([])
   useEffect(() => {
+    if (visible) {
+        handleSetValuesOnOpen()
+    }
     return () => {
         reset()
+        setUserCompanies([])
     }
   }, [visible]);
 
@@ -43,8 +48,7 @@ export default function ModalAddEdit({ handleClose, onSaved, visible, currentUse
     formState: { errors, isValid },
     handleSubmit,
     reset,
-
-
+      getValues
   } = useForm<User>({
     values: {
       name: "",
@@ -63,7 +67,9 @@ export default function ModalAddEdit({ handleClose, onSaved, visible, currentUse
       setValue("email", currentUser.email);
       setValue("birth_date",currentUser.birth_date);
       setValue("birth_city",currentUser.birth_city);
+      setValue("cellphone",currentUser.cellphone);
       setValue("companies", currentUser.companies);
+      setUserCompanies(currentUser.companies)
     }
   };
 
@@ -229,12 +235,12 @@ export default function ModalAddEdit({ handleClose, onSaved, visible, currentUse
             {companies && companies.length ? (
                 <FormControl>
                     <FormLabel> Empresas </FormLabel>
-                    <Autocomplete options={companies} getOptionLabel={item => item.name} multiple onChange={(e, value) => {
-                        setValue('companies', companies)
+                    <Autocomplete value={userCompanies} options={companies} getOptionLabel={item => item.name} multiple onChange={(e, value) => {
+                        setUserCompanies(value)
+                        setValue('companies', value)
                     }}  />
                 </FormControl>
             ): null}
-            <p> { JSON.stringify(isValid)}</p>
           <Grid sx={{ display: "flex", justifyContent: "space-between", marginTop: "1rem"}}>
               <Button color='danger' type='button' onClick={() => reset()}> Limpar </Button>
               <Button sx={{ backgroundColor: "black", color: "white" }} type="submit"  disabled={!isValid}> Enviar </Button>
