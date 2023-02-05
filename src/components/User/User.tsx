@@ -18,7 +18,7 @@ export default function UserComponent({companies, users, refetechUsers}: Company
     const filterFields = [
         {label: "Nome", value: "name"},
         {label: "E-mail", value: "email"},
-        {label: "Data de nascimento", value: "birth_date"},
+        {label: "Data de nascimento", value: "birth_date", fieldType: "date"},
         {label: "Cidade de nascimento", value: "birth_city"},
     ];
     const [showModal, setShowModal] = useState<boolean>(false);

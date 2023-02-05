@@ -8,6 +8,7 @@ import {userService} from "../../service/UserService";
 import {companyService} from "../../service/CompanyService";
 import {toast} from "react-toastify";
 import {User} from "../../models/User";
+import {toDateBR} from "../../helpers/ToDateBR";
 
 type TableListProps = {
     onDelete: () => void
@@ -49,7 +50,7 @@ export default function TableList({onClickEdit, onDelete, users}: TableListProps
                     <tr>
                         <td> {user.name} </td>
                         <td> {user.email} </td>
-                        <td> {user.birth_date} </td>
+                        <td> {toDateBR(user.birth_date)} </td>
                         <td> {user.birth_city} </td>
                         <td colSpan={2}>
                             <div style={{display: "flex"}}>

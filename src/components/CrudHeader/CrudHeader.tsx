@@ -5,24 +5,23 @@ type CrudHeaderProps = {
   onAddClick(): void;
   onSearch(value: string, field: string): void;
   searchAll(): void,
-  searchFieldOption: Array<{ label: string; value: string }>;
+  searchFieldOption: Array<{ label: string; value: string, fieldType?: string }>;
 };
 
 export default function CrudHeader({
   onAddClick,
   onSearch,
   searchFieldOption,
-    searchAll
+  searchAll,
 }: CrudHeaderProps) {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [searchOption, setSearchOption] = useState<{ label: string, value: string }>({label: "", value: ""});
-
+  const [searchOption, setSearchOption] = useState<{ label: string, value: string, fieldType?: string}>({label: "", value: "", fieldType: ""});
+  const [fieldSearchType, setFieldSearchType] = useState<string>("text")
   useEffect(() => {
     handleSearch()
   }, [searchValue])
 
   const handleSearch = () => {
-    console.log(searchValue)
     if (searchOption.value) {
       if(!searchValue) {
         searchAll()
@@ -43,13 +42,13 @@ export default function CrudHeader({
           </IconButton>
         </Grid>
         <Grid xs={6}>
-          <Input disabled={!searchOption.value} placeholder="Buscar..." value={searchValue} onChange={(e) => {
-            setSearchValue(e.target.value)
-          }}/>
+          <Input type={fieldSearchType} disabled={!searchOption.value} placeholder="Buscar..." value={searchValue} onChange={(e) => { setSearchValue(e.target.value)}}/>
         </Grid>
         <Grid xs={4}>
           <Autocomplete placeholder={"Campo de busca"} options={searchFieldOption} getOptionLabel={item => item.label} value={searchOption} onChange={(e, value) => {
               const searchOption = value ?? { label: "", value: ""}
+              console.log(value?.fieldType)
+              setFieldSearchType(value?.fieldType ?? "text")
               setSearchOption(searchOption)
           }} />
         </Grid>

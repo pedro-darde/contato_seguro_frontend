@@ -32,7 +32,7 @@ export default function UsersPage() {
     }
     return (
         <div className="main">
-            <h2> Area Usuarios</h2>
+            <h2> Área Usuários </h2>
             <UserComponent users={users} refetechUsers={fetchUsers}  companies={companies}/>
         </div>
     )
