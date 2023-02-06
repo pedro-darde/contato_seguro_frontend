@@ -7,6 +7,7 @@ import {useAlert} from "../../hooks/useAlert";
 import {userService} from "../../service/UserService";
 import {companyService} from "../../service/CompanyService";
 import {toast} from "react-toastify";
+import { maskCNPJ } from "../../helpers/maskCNPJ";
 
 type TableListProps = {
     onDelete: () => void
@@ -48,7 +49,7 @@ export default function TableList({onClickEdit, onDelete, companies}: TableListP
                 {companies?.map(company => (
                     <tr>
                         <td> {company.name} </td>
-                        <td> {company.cnpj} </td>
+                        <td> {maskCNPJ(company.cnpj)} </td>
                         <td> {company.address} </td>
                         <td colSpan={2}>
                             <div style={{display: "flex"}}>
