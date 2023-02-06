@@ -11,7 +11,7 @@ export default function HomePage() {
                 </Typography>
                 <Grid container spacing={2} sx={{ flexGrow: 1, alignContent: "center", justifyContent: "center"}}>
                     <Grid xs={6}>
-                        <Button color="neutral" fullWidth onClick={() => history.push('/users')}> Usuarios </Button>
+                        <Button color="neutral" fullWidth onClick={() => history.push('/users')}> Usuários </Button>
                     </Grid>
                     <Grid xs={6}>
                         <Button  color="neutral" fullWidth onClick={() => history.push('/companies')}> Empresas </Button>

@@ -21,7 +21,9 @@ export default function TableList({onClickEdit, onDelete, users}: TableListProps
         showConfirm("Você tem certeza? O vínculo com as empresas será removido também.").then(res => {
             if (res.isConfirmed) {
                 userService.delete(userId).then(res => {
-                    toast("Usuário removido")
+                    toast("Usuário removido com sucesso.", {
+                        type: "success"
+                    })
                     onDelete()
                 }).catch(err => {
                     console.log(err)

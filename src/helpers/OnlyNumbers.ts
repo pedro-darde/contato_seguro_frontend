@@ -1,0 +1,1 @@
+export const onlyNumbers = (str: string) => str.replace(/[^a-zA-Z0-9 ]/g, '')

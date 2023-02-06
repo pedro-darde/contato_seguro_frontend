@@ -6,7 +6,6 @@ import {User} from "../../models/User";
 import {toast} from "react-toastify";
 import TableList from "./TableList";
 import {debounce} from "lodash";
-import {companyService} from "../../service/CompanyService";
 import {FilterOptions} from "../../service/BaseService";
 
 type CompanyComponentProps = {
@@ -23,7 +22,9 @@ export default function CompanyComponent({companies, users, refetchCompanies}: C
     const [showModal, setShowModal] = useState<boolean>(false);
     const [currentCompany, setCurrentCompany] = useState<Company | null>(null)
     const onSave = () => {
-        toast('Empresa salva com sucesso!')
+        toast('Empresa salvo com sucesso!', {
+            type: "success"
+        })
         refetchCompanies()
         setShowModal(false)
     }
@@ -42,10 +43,8 @@ export default function CompanyComponent({companies, users, refetchCompanies}: C
         let options: FilterOptions = {
             searchValue: value,
             searchField: column,
-            searchOperation: "="
+            searchOperation: "ilike"
         }
-        if (column === 'cnpj') options.searchOperation = 'ilike'
-        if (column === 'address') options.searchOperation = 'ilike'
         refetchCompanies(options)
     }, 200)
 

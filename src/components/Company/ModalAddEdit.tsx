@@ -21,6 +21,7 @@ import {User} from "../../models/User";
 import './styles/ModalAddEdit.css'
 import {companyService} from "../../service/CompanyService";
 import {toast} from "react-toastify";
+import { onlyNumbers } from "../../helpers/OnlyNumbers";
 type ModalAddEditProps = {
   currentCompany?: Company | null;
   visible: boolean;
@@ -110,11 +111,13 @@ export default function ModalAddEdit({ handleClose, onSaved, visible, currentCom
   };
 
   async function edit(data: any) {
+      data.cnpj = onlyNumbers(data.cnpj)
       data.users = data.users?.map((user: any) => user.id) ?? []
       await companyService.update(currentCompany?.id!,data)
   }
 
   async function create(data: any) {
+      data.cnpj = onlyNumbers(data.cnpj)
       data.users = data.users?.map((user: any) => user.id) ?? []
       await companyService.create(data)
   }

@@ -6,7 +6,6 @@ import {User} from "../../models/User";
 import {toast} from "react-toastify";
 import TableList from "./TableList";
 import {debounce} from "lodash";
-import {companyService} from "../../service/CompanyService";
 import {FilterOptions} from "../../service/BaseService";
 
 type CompanyComponentProps = {
@@ -24,7 +23,9 @@ export default function UserComponent({companies, users, refetechUsers}: Company
     const [showModal, setShowModal] = useState<boolean>(false);
     const [currentUser, setCurrentUser] = useState<User | null>(null)
     const onSave = () => {
-        toast('Usuário salva com sucesso!')
+        toast('Usuário salva com sucesso!', {
+            type: "success"
+        })
         refetechUsers()
         setShowModal(false)
     }
